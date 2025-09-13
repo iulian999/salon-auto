@@ -1,29 +1,23 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, NotFoundException } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller()
+@Controller('configurari')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  // Lista toate configurările (Nivel 5)
-  @Get('configurari/list')
+  // Nivel 5: lista toate configurările
+  @Get('list')
   getAll() {
     return this.appService.findAll();
   }
 
-  // Detalii configurare după id (Nivel 6)
-  @Get('configurari/details/:id')
+  // Nivel 6: detalii configurare după id, cu 404 dacă nu există
+  @Get('details/:id')
   getById(@Param('id') id: string) {
-    return this.appService.findById(+id);
-  }
-
-  // Căutare cu query params (Nivel 8)
-  @Get('configurari/search')
-  search(
-    @Query('model') model: string,
-    @Query('minPrice') minPrice: string,
-    @Query('maxPrice') maxPrice: string
-  ) {
-    return this.appService.search(model, +minPrice, +maxPrice);
+    const config = this.appService.findById(+id);
+    if (!config) {
+      throw new NotFoundException('Configurare nu există');
+    }
+    return config;
   }
 }

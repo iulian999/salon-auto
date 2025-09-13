@@ -1,35 +1,34 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+
+export interface Configurare {
+  id: number;
+  model: string;
+  pret: number;
+  culoare?: string;
+}
 
 @Injectable()
 export class AppService {
-  private configurari = [
-    { id: 1, model: 'Audi A4', optiuni: ['Navigatie', 'Piele'], pret: 30000 },
-    { id: 2, model: 'BMW X3', optiuni: ['Bluetooth', 'Trapa'], pret: 40000 },
-    { id: 3, model: 'Mercedes C200', optiuni: ['Clima', 'Senzori'], pret: 35000 },
-    { id: 4, model: 'VW Golf', optiuni: ['Navigatie'], pret: 25000 },
-    { id: 5, model: 'Opel Astra', optiuni: ['Bluetooth'], pret: 22000 },
-    { id: 6, model: 'Ford Focus', optiuni: ['Piele'], pret: 23000 },
-    { id: 7, model: 'Renault Megane', optiuni: ['Trapa'], pret: 21000 },
-    { id: 8, model: 'Toyota Corolla', optiuni: ['Clima'], pret: 24000 },
-    { id: 9, model: 'Honda Civic', optiuni: ['Navigatie', 'Bluetooth'], pret: 26000 },
-    { id: 10, model: 'Nissan Qashqai', optiuni: ['Senzori'], pret: 28000 },
+  private configurari: Configurare[] = [
+    { id: 1, model: 'Audi A3', pret: 25000, culoare: 'Negru' },
+    { id: 2, model: 'BMW X5', pret: 45000, culoare: 'Alb' },
+    { id: 3, model: 'Mercedes C200', pret: 35000, culoare: 'Gri' },
+    { id: 4, model: 'Volkswagen Golf', pret: 20000, culoare: 'Rosu' },
+    { id: 5, model: 'Toyota Corolla', pret: 22000, culoare: 'Albastru' },
+    { id: 6, model: 'Ford Focus', pret: 21000, culoare: 'Negru' },
+    { id: 7, model: 'Honda Civic', pret: 23000, culoare: 'Alb' },
+    { id: 8, model: 'Nissan Qashqai', pret: 27000, culoare: 'Gri' },
+    { id: 9, model: 'Kia Sportage', pret: 25000, culoare: 'Rosu' },
+    { id: 10, model: 'Hyundai Tucson', pret: 26000, culoare: 'Albastru' },
   ];
 
-  findAll() {
+  // Nivel 5: returnează toate configurările
+  findAll(): Configurare[] {
     return this.configurari;
   }
 
-  findById(id: number) {
-    const configurare = this.configurari.find(c => c.id === id);
-    if (!configurare) throw new NotFoundException('Element nu există');
-    return configurare;
-  }
-
-  search(model?: string, min?: number, max?: number) {
-    return this.configurari.filter(c =>
-      (!model || c.model.toLowerCase().includes(model.toLowerCase())) &&
-      (!min || c.pret >= min) &&
-      (!max || c.pret <= max)
-    );
+  // Nivel 6: returnează configurarea după id sau undefined
+  findById(id: number): Configurare | undefined {
+    return this.configurari.find(c => c.id === id);
   }
 }
