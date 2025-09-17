@@ -15,12 +15,10 @@ export class ConfigurariService {
     { id: 10, model: 'Renault Megane', pret: 19000 },
   ];
 
-  // Lista completă
   findAll() {
     return this.configurari;
   }
 
-  // Detalii după id
   findOne(id: number) {
     const configurare = this.configurari.find(c => c.id === id);
     if (!configurare) {
@@ -29,12 +27,17 @@ export class ConfigurariService {
     return configurare;
   }
 
-  // Căutare după query params
   search(model?: string, min?: number, max?: number) {
     return this.configurari.filter(c =>
       (!model || c.model.toLowerCase().includes(model.toLowerCase())) &&
       (!min || c.pret >= min) &&
       (!max || c.pret <= max)
+    );
+  }
+
+  searchByName(name?: string) {
+    return this.configurari.filter(c =>
+      !name || c.model.toLowerCase().includes(name.toLowerCase())
     );
   }
 }
